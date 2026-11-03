@@ -7,6 +7,7 @@ import { caseStudies } from "@/lib/content";
 import { ButtonLink, Chip, Container } from "@/components/ui";
 import { ProjectVisual, Screenshot } from "@/components/covers";
 import { FadeIn, Reveal } from "@/components/motion";
+import { RigsafePipeline } from "@/components/pipeline";
 
 export function generateStaticParams() {
   return caseStudies.map((p) => ({ slug: p.slug }));
@@ -93,6 +94,20 @@ async function CaseStudy({ params }: { params: Promise<{ slug: string }> }) {
           </div>
         )}
 
+        {p.metrics && (
+          <div className="mt-14">
+            <dl className="grid grid-cols-2 gap-6 border-y border-border py-8 lg:grid-cols-4">
+              {p.metrics.map((m) => (
+                <div key={m.label} className="flex flex-col-reverse">
+                  <dt className="mt-2 text-sm text-muted">{m.label}</dt>
+                  <dd className="font-serif text-5xl leading-none tracking-[-0.02em]">{m.value}</dd>
+                </div>
+              ))}
+            </dl>
+            {p.metricsNote && <p className="label mt-3">{p.metricsNote}</p>}
+          </div>
+        )}
+
         <div className="mt-20 grid gap-12 lg:grid-cols-12">
           <aside className="lg:col-span-4">
             <div className="lg:sticky lg:top-24">
@@ -109,6 +124,7 @@ async function CaseStudy({ params }: { params: Promise<{ slug: string }> }) {
               <Reveal key={s.heading}>
                 <section>
                   <h2 className="font-serif text-3xl tracking-[-0.01em]">{s.heading}</h2>
+                  {s.diagram === "rigsafe" && <RigsafePipeline />}
                   {s.bullets && (
                     <ul className="mt-5 grid gap-3">
                       {s.bullets.map((b) => (

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight, Mail, MapPin, FileText } from "lucide-react";
-import { about, earlier, education, experience, featured, listed, site, skills, type Role } from "@/lib/content";
+import { about, capabilities, earlier, education, experience, featured, listed, site, skills, type Role } from "@/lib/content";
 import { ButtonLink, Chip, Container, SectionHeader } from "@/components/ui";
 import { Reveal } from "@/components/motion";
 import { ProjectCard } from "@/components/project-card";
@@ -21,7 +21,7 @@ export function Work() {
               Selected <em className="text-accent">work</em>
             </>
           }
-          lede="Live client systems first. Each one has a short case study with what I built and why, and no invented numbers."
+          lede="Live client systems first. Each case study covers the trade-offs, how the work is measured, and what happens when it fails."
         />
         <div className="grid gap-5 lg:grid-cols-3">
           {lead && (
@@ -87,7 +87,7 @@ export function Ai() {
             </p>
             <p className="mt-5 text-muted">
               I use this pattern in n8n and Microsoft Teams automations, and inside Rigsafe, where AI drafts tenders from their
-              documents and flags imported data for review instead of trusting it.
+              documents and unconfirmed data waits for a person.
             </p>
             <ol className="sr-only">
               <li>Input arrives by email, document or chat.</li>
@@ -106,6 +106,19 @@ export function Ai() {
           <Reveal className="rounded-[14px] border border-border bg-bg p-5 sm:p-8 lg:col-span-7" delay={0.1}>
             <AiFlow />
           </Reveal>
+        </div>
+
+        <div className="mt-16 grid gap-px overflow-hidden rounded-[14px] border border-border bg-border sm:grid-cols-2 lg:grid-cols-5">
+          {capabilities.map((c, i) => (
+            <Reveal key={c.area} delay={i * 0.04} className="bg-surface p-6">
+              <h3 className="font-medium">{c.area}</h3>
+              <ul className="mt-4 grid gap-3 text-sm leading-snug text-muted">
+                {c.proof.map((p) => (
+                  <li key={p}>{p}</li>
+                ))}
+              </ul>
+            </Reveal>
+          ))}
         </div>
       </Container>
     </section>
@@ -144,7 +157,7 @@ export function Experience() {
               From infrastructure <em className="text-accent">to AI</em>
             </>
           }
-          lede="Fifteen years across enterprise support, networks and cloud, then full-stack delivery and AI engineering."
+          lede="Fifteen years across enterprise support, networks and cloud, then full-stack delivery, and now production AI."
         />
         <Reveal>
           <ol className="relative before:absolute before:bottom-12 before:left-0 before:top-3 before:w-px before:bg-border md:before:left-1/4">
@@ -188,7 +201,7 @@ export function Stack() {
               The <em className="text-accent">toolkit</em>
             </>
           }
-          lede="Consolidated from shipped work. No skill bars, just what I have used in production."
+          lede="Consolidated from shipped work, with growing areas marked as growing."
         />
         <div className="grid border-t border-border">
           {skills.map((g, i) => (
@@ -277,8 +290,8 @@ export function Contact() {
                 <ButtonLink href={site.cv} download>
                   Download CV
                 </ButtonLink>
-                <Link href="/work/rigsafe-crm" className="inline-flex min-h-11 items-center text-muted underline-offset-4 hover:text-fg hover:underline">
-                  Latest case study
+                <Link href="/resume" className="inline-flex min-h-11 items-center text-muted underline-offset-4 hover:text-fg hover:underline">
+                  Read online
                 </Link>
               </div>
             </div>

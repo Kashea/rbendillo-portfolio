@@ -13,6 +13,7 @@ const links = [
   { href: "/#experience", label: "Experience" },
   { href: "/#stack", label: "Stack" },
   { href: "/#about", label: "About" },
+  { href: "/resume", label: "Résumé" },
 ];
 
 export function Nav() {
@@ -57,7 +58,7 @@ export function Nav() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color,backdrop-filter] duration-300",
+        "fixed inset-x-0 top-0 z-50 border-b print:hidden transition-[background-color,border-color,backdrop-filter] duration-300",
         scrolled ? "border-border bg-bg/70 backdrop-blur-xl" : "border-transparent bg-transparent",
       )}
     >

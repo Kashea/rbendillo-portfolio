@@ -3,7 +3,7 @@ import { Container } from "@/components/ui";
 
 export function Footer() {
   return (
-    <footer className="border-t border-border py-10">
+    <footer className="border-t border-border py-10 print:hidden">
       <Container className="flex flex-col gap-4 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
         <p>
           © 2026 {site.name}

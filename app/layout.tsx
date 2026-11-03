@@ -18,7 +18,7 @@ const instrument = Instrument_Serif({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: { default: `${site.name} | ${site.role}`, template: `%s | ${site.short}` },
-  description: "Full-stack developer and AI engineer building Next.js products, operational CRMs and human-in-the-loop AI workflows.",
+  description: "AI engineer and full-stack developer shipping tested, auditable AI automation and Next.js products, with people in control of every decision.",
   openGraph: { type: "website", siteName: site.short },
   twitter: { card: "summary_large_image" },
 };

@@ -1,8 +1,8 @@
 # rbendillo-portfolio
 
-Personal portfolio of **Rossrival M. Bendillo**, Full-Stack Developer & AI Engineer.
+Personal portfolio of **Rossrival M. Bendillo**, AI Engineer & Full-Stack Developer.
 
-Selected work, case studies (including the Rigsafe CRM), experience and toolkit, on a single fast page with a three.js hero.
+Selected work, case studies with trade-offs, measurement and failure modes, a one-page resume and a three.js hero.
 
 ## Stack
 
@@ -15,12 +15,14 @@ Selected work, case studies (including the Rigsafe CRM), experience and toolkit,
 ## Structure
 
 ```
-app/                 routes: home, /work/[slug], sitemap, robots, icon
+app/                 routes: home, /work/[slug], /resume, sitemap, robots, icon
 components/          sections, nav, hero + three.js scene, project cards, covers
 lib/content.ts       every word on the site: projects, experience, skills
 public/images/work/  project screenshots (WebP)
-public/cv/           downloadable CV
+public/cv/           one-page CV PDF, printed from /resume
 ```
+
+To update the CV, edit `lib/content.ts`, print `/resume` to PDF (A4, no headers or footers) and replace the file in `public/cv/`.
 
 To add or hide a project, edit `lib/content.ts` and set `visibility` to `featured`, `listed` or `hidden`.
 

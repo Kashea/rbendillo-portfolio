@@ -39,18 +39,18 @@ export function Hero() {
           <p className="mt-8 max-w-[56ch] text-lg text-muted">{site.lede}</p>
           <div className="mt-10 flex flex-wrap gap-3">
             <ButtonLink href="#work">View selected work</ButtonLink>
-            <ButtonLink href={site.cv} variant="secondary" download>
-              Download CV
+            <ButtonLink href="/resume" variant="secondary">
+              View résumé
             </ButtonLink>
           </div>
-          <ul className="mt-14 flex flex-wrap gap-x-6 gap-y-3 border-t border-border pt-6">
-            {site.proof.map((p, i) => (
-              <li key={p} className="label flex items-center gap-6">
-                {i > 0 && <span className="hidden h-3 w-px bg-border sm:block" aria-hidden />}
-                {p}
-              </li>
+          <dl className="mt-14 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-border pt-6 lg:grid-cols-4">
+            {site.proof.map((p) => (
+              <div key={p.label} className="flex flex-col-reverse">
+                <dt className="mt-2 max-w-[24ch] text-sm leading-snug text-muted">{p.label}</dt>
+                <dd className="font-serif text-4xl leading-none tracking-[-0.02em]">{p.value}</dd>
+              </div>
             ))}
-          </ul>
+          </dl>
         </FadeIn>
       </Container>
     </section>

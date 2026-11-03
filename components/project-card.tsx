@@ -55,6 +55,16 @@ export function ProjectCard({ project, wide }: { project: Project; wide?: boolea
             </ul>
           )}
         </div>
+        {wide && project.metrics && (
+          <dl className="mt-6 grid grid-cols-3 gap-4 border-t border-border pt-5">
+            {project.metrics.slice(0, 3).map((m) => (
+              <div key={m.label} className="flex flex-col-reverse">
+                <dt className="mt-1.5 text-xs leading-snug text-muted">{m.label}</dt>
+                <dd className="font-serif text-3xl leading-none">{m.value}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
         <div className="mt-7 flex items-end justify-between gap-4">
           <div className="flex flex-wrap gap-1.5">
             {project.stack.slice(0, wide ? 4 : 3).map((s) => (

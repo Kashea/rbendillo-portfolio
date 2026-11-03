@@ -4,30 +4,35 @@
 export const site = {
   name: "Rossrival M. Bendillo",
   short: "Ross Bendillo",
-  role: "Full-Stack Developer & AI Engineer",
+  role: "AI Engineer & Full-Stack Developer",
   location: "Bataan, Philippines",
-  availability: "Open to remote roles and client projects",
+  availability: "Open to remote AI engineering roles and client projects",
   email: "camrynchelsea01@gmail.com",
-  cv: "/cv/Rossrival-Bendillo-CV.pdf",
+  phone: "+63 967 125 2731",
+  github: "github.com/Kashea",
+  web: "rbendillo-portfolio.vercel.app",
+  cv: "/cv/Rossrival-Bendillo-Resume.pdf",
   // Set NEXT_PUBLIC_SITE_URL once a custom domain is live; Vercel's production URL covers it until then.
   url:
     process.env.NEXT_PUBLIC_SITE_URL ??
     (process.env.VERCEL_PROJECT_PRODUCTION_URL
       ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
       : "http://localhost:3000"),
-  headline: ["I build the web products,", "and the AI workflows", "behind them."],
-  lede: "Full-stack developer and AI engineer shipping Next.js products, operational CRMs and human-in-the-loop automation, with a systems-engineering background in identity, networks and production support.",
+  headline: ["I build AI systems", "people can trust", "in production."],
+  lede: "AI engineer and full-stack developer with 15 years across IT systems and software. I ship Next.js products and automation where AI prepares the work, people approve it, and every step is tested and logged.",
   proof: [
-    "Live CRM in production",
-    "Next.js · TypeScript · AI",
-    "Role-based & multitenant systems",
-    "AI with approval gates",
+    { value: "27", label: "automation workflows on one client platform" },
+    { value: "40/40", label: "test suites gating each deploy" },
+    { value: "15", label: "written runbooks for operating it" },
+    { value: "15 yrs", label: "across IT systems and software" },
   ],
 };
 
 export type CoverKind = "rigsafe" | "ai" | "karate" | "chito";
 
-export type Section = { heading: string; body?: string; bullets?: string[] };
+export type Section = { heading: string; body?: string; bullets?: string[]; diagram?: "rigsafe" };
+
+export type Metric = { value: string; label: string };
 
 export type Shot = { src: string; alt: string; label: string };
 
@@ -47,6 +52,8 @@ export type Project = {
   imageNote?: string;
   gallery?: Shot[];
   highlights?: string[];
+  metrics?: Metric[];
+  metricsNote?: string;
   sections?: Section[];
 };
 
@@ -54,57 +61,91 @@ export const projects: Project[] = [
   {
     slug: "rigsafe-crm",
     title: "Rigsafe CRM",
-    kicker: "Staff Hub & CRM · Lifting solutions",
+    kicker: "CRM & AI automation platform · Lifting solutions",
     url: null, // private, sign-in only
     visibility: "featured",
-    role: "Full-stack & AI engineer",
+    role: "AI engineer & full-stack developer",
     year: "2026",
     status: "Live with client",
     summary:
-      "A full operational CRM for a cranes, transport and projects business: tenders, pricing, pipeline, forecasting and a staff hub, with AI built into the intake and review flows.",
-    stack: ["Next.js", "TypeScript", "React Server Components", "AI document intake", "Caddy", "Strict CSP"],
+      "A live CRM and automation platform for a cranes, transport and projects business. AI drafts and checks the work, 27 workflows move the data, and tests gate every deploy.",
+    stack: ["Next.js", "TypeScript", "n8n", "Postgres", "AI document intake", "Caddy"],
     cover: "rigsafe",
     highlights: [
-      "Tender register from intake to negotiation",
-      "AI drafts tenders from their documents",
-      "Win-weighted revenue forecasting",
-      "Spreadsheet migration with a human review queue",
+      "AI drafts tender records from their documents",
+      "Daily ingest chain with an outcome check at the end",
+      "Unconfirmed data queued for a person, never trusted silently",
+      "Deploys blocked unless every test suite passes",
     ],
+    metrics: [
+      { value: "27", label: "n8n workflows" },
+      { value: "40/40", label: "test suites passing" },
+      { value: "15", label: "operating runbooks" },
+      { value: "7", label: "business areas served" },
+    ],
+    metricsNote: "Engineering figures from September 2026. Client business data is deliberately left out.",
     sections: [
       {
         heading: "The problem",
-        body: "A lifting-solutions business running cranes, transport and project divisions tracked tenders, pricing and forecasts across spreadsheets. Nobody had one view of what was waiting, what was overdue, or what the pipeline was really worth.",
+        body: "A lifting-solutions business running cranes, transport and project divisions tracked tenders, pricing and forecasts across spreadsheets and separate systems. Nobody had one view of what was waiting, what was overdue, or what the pipeline was really worth.",
       },
       {
         heading: "What I built",
         bullets: [
-          "Staff Hub: one home for seven business areas (Commercial Growth, Operations, Safety & Compliance, Assets & Maintenance, People & Culture, Business Support, Executive).",
-          "Tender register with a staged pipeline (Intake, Pricing, Review, Submitted, Negotiation), win chance, due dates, estimator assignment and sell/GP values.",
-          "Commercial tools: pipeline register, triage and board, follow-ups, jobs to price, a rate library, BD leads and a company directory.",
-          "Operations: live jobs and a resource forecast.",
-          "Dashboard with financial-year and division filters: open and weighted pipeline, win rate by value and by count, average won job and tenders issued.",
+          "Staff Hub: one home for seven business areas, from Commercial Growth and Operations to Safety & Compliance and Executive.",
+          "Tender register with a staged pipeline from intake to negotiation, win chance, due dates and estimator assignment.",
+          "Pipeline triage and board, follow-ups, jobs to price, a rate library, BD leads and a company directory.",
+          "Live jobs, a resource forecast, and a dashboard filtered by financial year and division.",
+          "An integration engine underneath: connectors for field, forms, mail and file systems feeding a daily ingest chain and scheduled reports.",
         ],
+      },
+      {
+        heading: "Architecture",
+        diagram: "rigsafe",
+        body: "Source systems stay the system of record. Data is pulled in, normalised and verified before anything downstream reads it, and anything that fails verification goes to a person.",
       },
       {
         heading: "Where the AI sits",
         bullets: [
           "New tender from its documents: upload the tender pack and the system drafts the tender record for a person to check.",
-          "Data review queue: the legacy workbook was imported, and every result, formula or reference the importer could not confirm is queued for a human instead of being trusted silently.",
+          "Data review queue: every imported result, formula or reference that could not be confirmed waits for a human.",
           "An in-app assistant available from every screen.",
         ],
-        body: "The same rule as my approval-gate work: AI prepares, a person confirms, and nothing unverified lands in the numbers.",
+        body: "The rule is the same everywhere: AI prepares, a person confirms, and nothing unverified lands in the numbers.",
       },
       {
-        heading: "Forecasting",
-        body: "Monthly revenue forecasts can be shown at full value or weighted by win likelihood. Work is discounted by its stage and only won work counts in full, so the executive view reflects risk instead of optimism.",
+        heading: "Trade-offs",
+        bullets: [
+          "n8n over custom workers: operations can see every run and step. The cost is that visual workflows drift, so reports are generated by scripts in version control and covered by tests.",
+          "Human approval over full automation: slower per item, but one wrong figure in a tender costs more than the review does.",
+          "Self-hosted over managed services: the data stays on infrastructure we control, in exchange for owning the patching, backups and runbooks.",
+        ],
       },
       {
-        heading: "Security and delivery",
+        heading: "How it is measured",
+        bullets: [
+          "40 automated test suites run before a change ships, and it only commits if all of them pass.",
+          "An independent read-back checks results from outside n8n, so a workflow cannot mark its own homework.",
+          "The ingest chain ends with an assertion on the whole outcome, not just on each step having run.",
+          "The daily site brief flags anomalies for a person to check, such as a submitted shift with no hours recorded.",
+        ],
+      },
+      {
+        heading: "Failure modes I designed for",
+        bullets: [
+          "A connector fails mid-chain: every step has an error path into a shared handler, and the chain fails loudly instead of reporting partial success.",
+          "A step runs but the data is wrong: verification and the end-of-chain assertion catch it before it reaches staff.",
+          "A scheduled run fires before it should: an activation gate holds it, and a manual rehearsal trigger proves the chain first.",
+          "An import is uncertain: it goes to the exception queue for a person, with a written procedure for clearing it.",
+          "A release goes bad: release, rollback and schema-migration runbooks are written down before they are needed.",
+        ],
+      },
+      {
+        heading: "Security",
         bullets: [
           "Passwordless sign-in by emailed link for staff.",
-          "Next.js App Router served behind Caddy over HTTPS.",
           "Strict Content-Security-Policy, HSTS, frame-ancestors none, nosniff and a locked-down permissions policy.",
-          "Light, dark and system themes, global search, and dashboard export by download or email.",
+          "Next.js App Router served behind Caddy over HTTPS.",
         ],
       },
     ],
@@ -122,6 +163,10 @@ export const projects: Project[] = [
     stack: ["n8n", "Claude", "Power Automate", "Microsoft Teams", "Microsoft 365", "Entra ID"],
     cover: "ai",
     highlights: ["Confidence & risk gating", "Edit before send", "Approve / block", "Audit-oriented states"],
+    metrics: [
+      { value: "6", label: "stages from input to audit" },
+      { value: "3", label: "reviewer actions: edit, approve, block" },
+    ],
     sections: [
       {
         heading: "The problem",
@@ -134,6 +179,20 @@ export const projects: Project[] = [
           "Low-risk, high-confidence items move quickly; anything else stops at a human gate.",
           "Reviewers can edit before sending, approve, or block.",
           "Each step writes an audit-oriented state, so every outcome can be traced.",
+        ],
+      },
+      {
+        heading: "Trade-offs",
+        bullets: [
+          "A gate adds waiting time, so thresholds decide what truly needs a person. Gating everything would just move the bottleneck.",
+          "Edit-before-send keeps drafts useful when they are almost right, instead of forcing a rejection and a rewrite.",
+        ],
+      },
+      {
+        heading: "Failure modes I designed for",
+        bullets: [
+          "The model is confidently wrong: risk is assessed alongside confidence, so a sure answer on a risky item still stops at a person.",
+          "Someone needs to know what happened later: audit states record the decision, not only the final message.",
         ],
       },
       {
@@ -174,6 +233,12 @@ export const projects: Project[] = [
           "next/image on the Sanity CDN for fast, responsive images.",
         ],
       },
+      {
+        heading: "Trade-offs",
+        bullets: [
+          "Headless CMS over a template: more setup up front, but content can change without a developer or a redeploy.",
+        ],
+      },
     ],
   },
   {
@@ -206,6 +271,12 @@ export const projects: Project[] = [
           "Dojo directory with country and region filtering.",
           "Login and admin area with role-based access.",
           "Events, examinations, downloads and technical resources.",
+        ],
+      },
+      {
+        heading: "Trade-offs",
+        bullets: [
+          "Localised routes over a translate widget: each language needs its own content, but pages stay readable to search engines and to members in Japan.",
         ],
       },
     ],
@@ -254,13 +325,25 @@ export type Role = { role: string; org: string; dates: string; bullets: string[]
 
 export const experience: Role[] = [
   {
+    role: "AI Engineer & Full-Stack Developer",
+    org: "ICTouch",
+    dates: "2026 — Present",
+    bullets: [
+      "Built Rigsafe CRM, a live Next.js and TypeScript platform covering tenders, pricing, pipeline, forecasting and staff operations across 7 business areas.",
+      "Built its integration engine: 27 n8n workflows, including a daily ingest chain that pulls, normalises, verifies and reports on field, forms, mail and file data.",
+      "Gated deploys on 40 automated test suites plus an independent read-back from outside n8n, committing only when all of them pass.",
+      "Added AI document intake that drafts tender records, and review queues that send unconfirmed data to a person instead of the dashboard.",
+      "Wrote 15 runbooks covering ingest, exception queues, schema migration, release and rollback, and compliance evidence.",
+    ],
+  },
+  {
     role: "Full-Stack Developer",
     org: "Noonan Real Estate",
     dates: "2025 — Present",
     bullets: [
-      "Built and shipped karateinstitute.au with Next.js and Sanity, from frontend through production release.",
       "Designed AI reasoning workflows with confidence and risk gates, edit-before-send, approve or block, and audit states.",
       "Built n8n pipelines with AI tooling and human approval steps, including Teams-based chat intelligence.",
+      "Built and shipped karateinstitute.au with Next.js and Sanity, from frontend through production release.",
       "Administered Microsoft 365 and Entra ID; maintained karate.org.au and noonan.com.au.",
     ],
   },
@@ -283,18 +366,15 @@ export const experience: Role[] = [
       "Maintained 3CX systems, Raspberry Pi security and RMM nodes, and production communications.",
     ],
   },
+];
+
+export const earlier: Role[] = [
   {
     role: "L2 MSP Support Engineer",
     org: "Far Out Solutions",
     dates: "2021 — 2022",
-    bullets: [
-      "Owned escalated issues through ConnectWise and Autotask PSA with clear client communication.",
-      "Delivered network-printer deployments and onsite support across endpoints and networks.",
-    ],
+    bullets: ["Owned escalated issues through ConnectWise and Autotask PSA, with onsite and network support."],
   },
-];
-
-export const earlier: Role[] = [
   {
     role: "Network & NOC Engineer",
     org: "Hospitality WiFi / Telna",
@@ -309,16 +389,94 @@ export const earlier: Role[] = [
   },
 ];
 
-// Consolidated from all three CVs plus the Rigsafe build. No percentages, no unsubstantiated tools.
-export const skills: { group: string; items: string[] }[] = [
-  { group: "Frontend", items: ["React", "Next.js App Router", "TypeScript", "JavaScript", "Tailwind CSS", "HTML & CSS", "Component systems", "three.js", "Framer Motion"] },
-  { group: "Backend & APIs", items: ["Server Components", "Server Actions & Route Handlers", "REST", "GraphQL", "Firebase", "Python (growing)"] },
-  { group: "AI & automation", items: ["Claude", "n8n", "Power Automate", "Human-in-the-loop approvals", "Confidence & risk gating", "AI document intake", "Teams chat bots"] },
-  { group: "Data & content", items: ["MySQL", "MongoDB", "Firebase", "Sanity", "Headless CMS", "Spreadsheet-to-app migration"] },
-  { group: "Architecture & security", items: ["Multitenancy", "Role-based access", "Centralised authorisation", "Server-enforced security", "CSP & security headers", "Passwordless auth"] },
-  { group: "Cloud & delivery", items: ["Vercel", "AWS Lightsail", "AWS Amplify", "Linux", "Caddy", "Git & GitHub", "Postman", "Agile delivery"] },
-  { group: "Identity & infrastructure", items: ["Microsoft 365", "Entra ID", "RADIUS", "Cisco Meraki", "MikroTik", "3CX"] },
+// Where each AI engineering area is proven in shipped work. Only list what is real; "growing" is allowed.
+export const capabilities: { area: string; proof: string[] }[] = [
+  {
+    area: "LLMs & grounding",
+    proof: [
+      "Tender records drafted by AI from the client's own documents",
+      "Output checked by a person before it is saved",
+      "Workflows read context from a verified data layer",
+    ],
+  },
+  {
+    area: "Agents & orchestration",
+    proof: [
+      "27 n8n workflows with success and error paths",
+      "Teams-based AI chat intelligence",
+      "Human handoff built in, not bolted on",
+    ],
+  },
+  {
+    area: "Ops & evaluation",
+    proof: [
+      "40 test suites gating deploys",
+      "Independent read-back from outside the workflow engine",
+      "Release, rollback and phase-gate runbooks",
+    ],
+  },
+  {
+    area: "Safety & governance",
+    proof: [
+      "Risk gates, approve or block, and audit states",
+      "Unconfirmed data held in a review queue",
+      "Strict CSP, passwordless sign-in and role-based access",
+    ],
+  },
+  {
+    area: "Foundations",
+    proof: [
+      "BS Computer Engineering",
+      "15 years of failure-mode thinking in networks and support",
+      "Python and ML fundamentals in active development",
+    ],
+  },
 ];
+
+// Consolidated from the CVs plus shipped client work. No percentages, no unsubstantiated tools.
+export const skills: { group: string; items: string[] }[] = [
+  { group: "Languages", items: ["TypeScript", "JavaScript", "SQL", "HTML & CSS", "Python (growing)"] },
+  { group: "AI & automation", items: ["Claude", "Claude Code", "n8n", "Power Automate", "Prompt engineering", "AI document intake", "Human-in-the-loop approvals", "Confidence & risk gating", "Teams chat bots"] },
+  { group: "Frameworks & libraries", items: ["Next.js App Router", "React", "Server Components", "Tailwind CSS", "three.js", "Framer Motion"] },
+  { group: "Data & content", items: ["Postgres", "MySQL", "MongoDB", "Firebase", "Sanity", "REST", "GraphQL", "Spreadsheet-to-app migration"] },
+  { group: "Infra & delivery", items: ["Docker", "AWS Lightsail", "AWS Amplify", "Vercel", "Linux", "Caddy", "Git & GitHub", "Automated test gates", "Runbooks", "Agile delivery"] },
+  { group: "Security & identity", items: ["Role-based access", "Multitenancy", "Server-enforced security", "CSP & security headers", "Passwordless auth", "Microsoft 365", "Entra ID"] },
+  { group: "Infrastructure background", items: ["RADIUS", "Cisco Meraki", "MikroTik", "3CX"] },
+];
+
+// One-page CV. Shares the same facts as the site; printed from /resume to public/cv.
+export const resume = {
+  summary:
+    "AI Engineer with 15 years across IT systems and software, building full-stack products in Next.js and TypeScript and now shipping production AI automation. Built Rigsafe CRM and its integration engine, a live client platform with 27 n8n workflows and 40 passing test suites, where AI prepares the work and people approve it. I turn messy business processes into deployed, tested and auditable systems.",
+  skills: [
+    { label: "Languages", items: "TypeScript, JavaScript, SQL, HTML, CSS, Python (growing)" },
+    { label: "AI / LLM", items: "Claude, prompt engineering, AI document intake, human-in-the-loop approvals, confidence and risk gating, workflow orchestration" },
+    { label: "Frameworks & automation", items: "Next.js, React, Tailwind CSS, n8n, Power Automate, three.js" },
+    { label: "Data", items: "Postgres, MySQL, MongoDB, Firebase, Sanity, REST, GraphQL" },
+    { label: "Infra & delivery", items: "Docker, AWS Lightsail, AWS Amplify, Vercel, Linux, Caddy, Git/GitHub, automated test gates, Microsoft 365, Entra ID" },
+  ],
+  projects: [
+    {
+      name: "AI Approval-Queue Workflows",
+      what: "human-in-the-loop AI pipelines",
+      bullets: [
+        "Built with n8n, Claude and Power Automate: 6 stages from input to audit, with confidence and risk gates and 3 reviewer actions (edit, approve, block).",
+      ],
+    },
+    {
+      name: "The Karate Institute",
+      what: "marketing and free-trial booking site for a Sydney dojo",
+      link: "karateinstitute.au",
+      bullets: ["Built with Next.js, TypeScript and Sanity: a CMS content model, booking form and per-page local SEO, deployed on Vercel."],
+    },
+    {
+      name: "Chito-Ryu International",
+      what: "bilingual platform for a worldwide karate federation",
+      link: "chitoryukaratedo.vercel.app",
+      bullets: ["Built English and Japanese routes, a dojo directory filtered by country and region, and a role-based admin area."],
+    },
+  ],
+};
 
 export const education = [
   { title: "BS Computer Engineering", org: "Bulacan State University", dates: "2001 — 2006" },
@@ -326,7 +484,7 @@ export const education = [
 ];
 
 export const about = [
-  "I started in infrastructure: enterprise support, NOC and MSP work, VoIP and cloud servers. That taught me reliability, security and how to explain a problem to the person who has it.",
+  "I started in infrastructure: enterprise support, NOC and MSP work, VoIP and cloud servers. That taught me how systems fail, and how to explain a problem to the person who has it.",
   "Then I moved into full-stack delivery with Next.js and TypeScript, and now into AI engineering. My rule for AI is simple: it prepares, a person decides, and every decision is recorded.",
-  "Rigsafe is the clearest example: a live CRM where AI drafts and checks, and staff stay in control of the numbers.",
+  "Rigsafe is the clearest example: a live platform where the tests decide what ships, and staff stay in control of the numbers.",
 ];
