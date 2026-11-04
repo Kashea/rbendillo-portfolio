@@ -8,7 +8,7 @@ const top = [
 ];
 const bottom = [
   { label: "Exception queue", sub: "a person clears it", x: 544, accent: true },
-  { label: "CRM & reports", sub: "only verified data", x: 366, accent: false },
+  { label: "Data layer & reports", sub: "only verified data", x: 366, accent: false },
   { label: "Outcome assertion", sub: "the whole chain passed", x: 188, accent: false },
   { label: "Error handler", sub: "fails loudly", x: 10, accent: false },
 ];
@@ -21,7 +21,7 @@ export function RigsafePipeline() {
     <figure className="mt-5 rounded-[14px] border border-border bg-surface p-4 sm:p-6">
       <svg viewBox="0 0 700 250" className="h-auto w-full" role="img" aria-labelledby="rigsafe-flow-title">
         <title id="rigsafe-flow-title">
-          Source systems feed connectors, data is normalised and verified, verified data reaches the CRM and reports,
+          Source systems feed connectors, data is normalised and verified, verified data reaches the data layer and reports,
           uncertain data goes to an exception queue, and failures go to an error handler.
         </title>
         <defs>

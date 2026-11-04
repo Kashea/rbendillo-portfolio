@@ -86,8 +86,8 @@ export function Ai() {
               person, who can edit, approve or block it, and every state is written to an audit trail.
             </p>
             <p className="mt-5 text-muted">
-              I use this pattern in n8n and Microsoft Teams automations, and inside Rigsafe, where AI drafts tenders from their
-              documents and unconfirmed data waits for a person.
+              I use this pattern in n8n and Microsoft Teams automations, and in Rigsafe, where every write goes through one
+              decision service and unconfirmed data waits for a person.
             </p>
             <ol className="sr-only">
               <li>Input arrives by email, document or chat.</li>
