@@ -36,7 +36,7 @@ export function RiseLines({ lines, accent }: { lines: string[]; accent?: number 
       {lines.map((line, i) => (
         <span key={line} className="block overflow-hidden pb-[0.08em]">
           <motion.span
-            className={i === accent ? "block italic text-accent" : "block"}
+            className={i === accent ? "block text-accent" : "block"}
             initial={{ y: reduce ? 0 : "105%", opacity: reduce ? 0 : 1 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, ease, delay: 0.1 + i * 0.08 }}

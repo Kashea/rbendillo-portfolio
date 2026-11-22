@@ -1,7 +1,8 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { Moon, Sun } from "lucide-react";
+import { PeregrineMark } from "@/components/peregrine-mark";
+import { cn } from "@/components/ui";
 
 function subscribe(cb: () => void) {
   const mo = new MutationObserver(cb);
@@ -9,11 +10,12 @@ function subscribe(cb: () => void) {
   return () => mo.disconnect();
 }
 
+// Rival Mode: the opt-in dark cyberpunk theme.
 export function ThemeToggle() {
   const dark = useSyncExternalStore(
     subscribe,
     () => document.documentElement.classList.contains("dark"),
-    () => true,
+    () => false,
   );
 
   const toggle = () => {
@@ -28,10 +30,18 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={toggle}
-      aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}
-      className="grid size-10 place-items-center rounded-full border border-border text-muted transition-colors hover:text-fg"
+      aria-label="Toggle dark mode"
+      aria-pressed={dark}
+      title="Rival Mode"
+      className={cn(
+        "inline-flex min-h-10 items-center gap-2 rounded-full border px-3 font-mono text-[0.7rem] uppercase tracking-[0.08em] transition-colors",
+        dark
+          ? "border-accent/60 text-accent shadow-[0_0_18px_-6px_var(--accent)]"
+          : "border-border text-muted hover:text-fg",
+      )}
     >
-      {dark ? <Sun size={16} strokeWidth={1.5} /> : <Moon size={16} strokeWidth={1.5} />}
+      <PeregrineMark size={16} id="toggle" />
+      <span className="hidden sm:inline">Rival Mode</span>
     </button>
   );
 }

@@ -1,1 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#121317"/><text x="32" y="41" text-anchor="middle" font-family="ui-monospace,monospace" font-size="24" font-weight="700" fill="#5fe3dc">RB</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Rival Peregrine icon">
+  <title>Rival Peregrine icon</title>
+  <rect width="512" height="512" rx="112" fill="#0A0B0F"/>
+  <g transform="translate(56 44) scale(0.78)">
+  <defs>
+    <linearGradient id="igrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#00E5FF"/>
+      <stop offset="0.62" stop-color="#00E5FF"/>
+      <stop offset="1" stop-color="#FF2BD6"/>
+    </linearGradient>
+    <filter id="iglow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="10" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <g filter="url(#iglow)">
+    <polygon points="256,462 422,90 302,232 278,58 256,100 234,58 210,232 90,90" fill="url(#igrad)" stroke-linejoin="round"/>
+  </g>
+  <g stroke="#0A0B0F" stroke-width="7" stroke-linecap="round" fill="none">
+    <line x1="256" y1="150" x2="256" y2="420"/>
+    <polyline points="256,330 300,286 352,186"/>
+    <polyline points="256,330 212,286 160,186"/>
+    <line x1="300" y1="286" x2="330" y2="286"/>
+    <line x1="212" y1="286" x2="182" y2="286"/>
+  </g>
+  <g fill="#0A0B0F">
+    <circle cx="352" cy="186" r="11"/><circle cx="160" cy="186" r="11"/>
+    <circle cx="330" cy="286" r="8"/><circle cx="182" cy="286" r="8"/>
+    <circle cx="256" cy="150" r="11"/>
+  </g>
+  <circle cx="256" cy="420" r="9" fill="#FF2BD6" stroke="#0A0B0F" stroke-width="5"/>
+  </g>
+</svg>

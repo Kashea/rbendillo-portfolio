@@ -6,7 +6,7 @@ export const site = {
   short: "Ross Bendillo",
   role: "AI Engineer & Full-Stack Developer",
   location: "Bataan, Philippines",
-  availability: "Open to remote AI engineering roles and client projects",
+  availability: "Open to remote AI engineering roles and client projects across AU, UK and beyond.",
   email: "camrynchelsea01@gmail.com",
   phone: "+63 967 125 2731",
   github: "github.com/Kashea",
@@ -18,7 +18,8 @@ export const site = {
     (process.env.VERCEL_PROJECT_PRODUCTION_URL
       ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
       : "http://localhost:3000"),
-  headline: ["I build AI systems", "people can trust", "in production."],
+  eyebrow: "// RIVAL PEREGRINE",
+  headline: ["I build AI that", "asks first, then ships", "like a peregrine."],
   lede: "AI engineer and full-stack developer with 15 years across IT systems and software. I ship Next.js products and automation where AI prepares the work, people approve it, and every step is tested and logged.",
   proof: [
     { value: "27", label: "automation workflows on one client platform" },
@@ -27,6 +28,61 @@ export const site = {
     { value: "15 yrs", label: "across IT systems and software" },
   ],
 };
+
+// Rival Peregrine: the alter ego and signature. Ross Bendillo stays the primary name.
+export const identity = {
+  alterEgo: "Rival Peregrine",
+  callsign: "Rival",
+  codeTag: "0xRIVAL",
+  mantra: "Jack in. Lock on. Strike clean.",
+  tagline: "AI that asks first. Ships like a peregrine.",
+  origin:
+    "\u201cRival\u201d comes from my name, Rossrival. The peregrine falcon is the fastest hunter on Earth, and it is fast because it is precise. It circles at altitude, reads the whole field, locks on, and only then dives. That is how I build AI: observe everything, gate on confidence, put a human on the trigger, then ship clean, tested and logged.",
+  signature: "\u2014 Ross \u00b7 0xRIVAL",
+};
+
+export type StageId = "altitude" | "lock_on" | "human_trigger" | "dive" | "trail";
+
+// The Peregrine Protocol: the falcon's hunt mapped onto the human-in-the-loop method.
+export const protocol: { id: StageId; label: string; name: string; falcon: string; engineering: string }[] = [
+  {
+    id: "altitude",
+    label: "01",
+    name: "Altitude",
+    falcon: "Circles high and reads the whole field.",
+    engineering: "Map the system, data and failure modes first. One decision service, no blind spots.",
+  },
+  {
+    id: "lock_on",
+    label: "02",
+    name: "Lock On",
+    falcon: "Commits only when the target is certain.",
+    engineering: "Confidence and risk scores gate every AI action. Low confidence routes to a person.",
+  },
+  {
+    id: "human_trigger",
+    label: "03",
+    name: "Human on the Trigger",
+    falcon: "The handler decides the strike.",
+    engineering: "Edit before send, approve or block. AI prepares, people approve.",
+  },
+  {
+    id: "dive",
+    label: "04",
+    name: "The Dive",
+    falcon: "Fastest strike in nature, and it does not miss.",
+    engineering: "Deploys are blocked unless every test suite passes. Ship fast because it is safe.",
+  },
+  {
+    id: "trail",
+    label: "05",
+    name: "The Trail",
+    falcon: "Every hunt leaves a record.",
+    engineering: "Tamper-evident change log, audit trails and written runbooks.",
+  },
+];
+
+export const stageName = (id: StageId) => protocol.find((st) => st.id === id)!.name;
 
 export type CoverKind = "rigsafe" | "ai" | "karate" | "chito";
 
@@ -54,6 +110,7 @@ export type Project = {
   highlights?: string[];
   metrics?: Metric[];
   metricsNote?: string;
+  protocol?: StageId[];
   sections?: Section[];
 };
 
@@ -84,6 +141,7 @@ export const projects: Project[] = [
       { value: "7", label: "business areas served" },
     ],
     metricsNote: "Engineering figures from September 2026. Client business data is deliberately left out.",
+    protocol: ["altitude", "lock_on", "human_trigger", "dive", "trail"],
     sections: [
       {
         heading: "The problem",
@@ -168,6 +226,7 @@ export const projects: Project[] = [
       { value: "6", label: "stages from input to audit" },
       { value: "3", label: "reviewer actions: edit, approve, block" },
     ],
+    protocol: ["lock_on", "human_trigger", "trail"],
     sections: [
       {
         heading: "The problem",

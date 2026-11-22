@@ -1,11 +1,24 @@
 import Link from "next/link";
 import { ArrowUpRight, Mail, MapPin, FileText } from "lucide-react";
-import { about, capabilities, earlier, education, experience, featured, listed, site, skills, type Role } from "@/lib/content";
+import {
+  about,
+  capabilities,
+  earlier,
+  education,
+  experience,
+  featured,
+  identity,
+  listed,
+  protocol,
+  site,
+  skills,
+  type Role,
+} from "@/lib/content";
 import { ButtonLink, Chip, Container, SectionHeader } from "@/components/ui";
 import { Reveal } from "@/components/motion";
 import { ProjectCard } from "@/components/project-card";
-import { AiFlow } from "@/components/ai-flow";
 import { CopyEmail } from "@/components/copy-email";
+import { PeregrineMark } from "@/components/peregrine-mark";
 
 const pad = "py-[clamp(5rem,12vw,9rem)]";
 
@@ -21,7 +34,7 @@ export function Work() {
               Selected <em className="text-accent">work</em>
             </>
           }
-          lede="Live client systems first. Each case study covers the trade-offs, how the work is measured, and what happens when it fails."
+          lede="Live systems. Real clients. Every strike logged. Each case study covers the trade-offs, how the work is measured, and what happens when it fails."
         />
         <div className="grid gap-5 lg:grid-cols-3">
           {lead && (
@@ -67,7 +80,9 @@ export function Work() {
   );
 }
 
-export function Ai() {
+// The Peregrine Protocol: the falcon's hunt mapped onto the human-in-the-loop method.
+// Static markup first; the trace only animates where CSS scroll timelines exist.
+export function Protocol() {
   return (
     <section id="ai" className={`${pad} border-y border-border bg-surface`}>
       <Container>
@@ -75,43 +90,60 @@ export function Ai() {
           index="02"
           title={
             <>
-              AI that <em className="text-accent">asks first</em>
+              The <em className="text-accent">Peregrine</em> Protocol
             </>
           }
+          lede="AI that asks first. How I put AI into production without losing control."
         />
-        <div className="grid items-center gap-12 lg:grid-cols-12">
-          <Reveal className="lg:col-span-5">
-            <p className="text-lg">
-              Every AI result carries a confidence and risk score. Safe, certain items move quickly. Anything else stops at a
-              person, who can edit, approve or block it, and every state is written to an audit trail.
-            </p>
-            <p className="mt-5 text-muted">
-              I use this pattern in n8n and Microsoft Teams automations, and in Rigsafe, where every write goes through one
-              decision service and unconfirmed data waits for a person.
-            </p>
-            <ol className="sr-only">
-              <li>Input arrives by email, document or chat.</li>
-              <li>AI reasons and drafts, with a confidence and risk score.</li>
-              <li>A gate routes by threshold.</li>
-              <li>A human edits before sending.</li>
-              <li>The human approves or blocks.</li>
-              <li>Every state is written to an audit log.</li>
-            </ol>
-            <div className="mt-8 flex flex-wrap gap-1.5">
-              {["Claude", "n8n", "Power Automate", "Microsoft Teams", "Entra ID"].map((s) => (
-                <Chip key={s}>{s}</Chip>
-              ))}
+        <div className="grid gap-12 lg:grid-cols-12">
+          <div className="lg:col-span-5">
+            <div className="lg:sticky lg:top-28">
+              <p className="font-mono text-sm uppercase tracking-[0.1em] text-accent">Circle. Lock on. Approve. Dive. Log.</p>
+              <p className="mt-6 text-lg">
+                Every AI result carries a confidence and risk score. Safe, certain items move quickly. Anything else stops at a
+                person, who can edit, approve or block it, and every state is written to an audit trail.
+              </p>
+              <p className="mt-5 text-muted">
+                I use this pattern in n8n and Microsoft Teams automations, and in Rigsafe, where every write goes through one
+                decision service and unconfirmed data waits for a person.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-1.5">
+                {["Claude", "n8n", "Power Automate", "Microsoft Teams", "Entra ID"].map((s) => (
+                  <Chip key={s}>{s}</Chip>
+                ))}
+              </div>
             </div>
-          </Reveal>
-          <Reveal className="rounded-[14px] border border-border bg-bg p-5 sm:p-8 lg:col-span-7" delay={0.1}>
-            <AiFlow />
-          </Reveal>
+          </div>
+
+          <ol className="relative lg:col-span-7" aria-label="The Peregrine Protocol, five stages">
+            <span className="trace-y absolute bottom-6 left-[11px] top-3 w-px" aria-hidden />
+            {protocol.map((st, i) => {
+              const last = i === protocol.length - 1;
+              return (
+                <li key={st.id} className="relative pb-8 pl-12 last:pb-0">
+                  <span
+                    className={`absolute left-[5px] top-2 size-[13px] rounded-full border-2 bg-bg ${
+                      last ? "border-strike shadow-[0_0_14px_var(--strike)]" : "border-accent"
+                    }`}
+                    aria-hidden
+                  />
+                  <div className="rounded-[14px] border border-border bg-bg p-5 sm:p-6">
+                    <p className={`font-mono text-xs uppercase tracking-[0.1em] ${last ? "text-strike" : "text-accent"}`}>
+                      {st.label} / {st.name}
+                    </p>
+                    <p className="mt-2 text-sm text-muted">{st.falcon}</p>
+                    <p className="mt-2 font-medium">{st.engineering}</p>
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
         </div>
 
         <div className="mt-16 grid gap-px overflow-hidden rounded-[14px] border border-border bg-border sm:grid-cols-2 lg:grid-cols-5">
           {capabilities.map((c, i) => (
             <Reveal key={c.area} delay={i * 0.04} className="bg-surface p-6">
-              <h3 className="font-medium">{c.area}</h3>
+              <h3 className="font-mono text-xs uppercase tracking-[0.08em] text-accent">{c.area}</h3>
               <ul className="mt-4 grid gap-3 text-sm leading-snug text-muted">
                 {c.proof.map((p) => (
                   <li key={p}>{p}</li>
@@ -131,7 +163,7 @@ function RoleItem({ r }: { r: Role }) {
       <span className="absolute left-0 top-2.5 size-[9px] -translate-x-[4px] rounded-full border border-accent bg-bg md:left-[calc(25%-4px)] md:translate-x-0" />
       <p className="label pt-1 md:col-span-3 md:pr-10 md:text-right">{r.dates}</p>
       <div className="md:col-span-9 md:pl-8">
-        <h3 className="text-xl font-medium">{r.role}</h3>
+        <h3 className="text-xl font-semibold">{r.role}</h3>
         <p className="text-muted">{r.org}</p>
         <ul className="mt-4 grid gap-2 text-[0.97rem] text-muted">
           {r.bullets.map((b) => (
@@ -154,7 +186,7 @@ export function Experience() {
           index="03"
           title={
             <>
-              From infrastructure <em className="text-accent">to AI</em>
+              From Infrastructure to AI: <em className="text-accent">The Flight Path</em>
             </>
           }
           lede="Fifteen years across enterprise support, networks and cloud, then full-stack delivery, and now production AI."
@@ -207,7 +239,7 @@ export function Stack() {
           {skills.map((g, i) => (
             <Reveal key={g.group} delay={i * 0.03}>
               <div className="grid gap-4 border-b border-border py-6 md:grid-cols-12">
-                <h3 className="font-medium md:col-span-3">{g.group}</h3>
+                <h3 className="pt-1 font-mono text-xs uppercase tracking-[0.08em] text-accent md:col-span-3">{g.group}</h3>
                 <div className="flex flex-wrap gap-2 md:col-span-9">
                   {g.items.map((s) => (
                     <Chip key={s} className="text-fg/85">
@@ -241,17 +273,29 @@ export function About() {
           <p className="label mb-4">
             <span className="text-accent">05</span> /
           </p>
-          <h2 className="font-serif text-[clamp(2.25rem,4.5vw,3.5rem)] leading-[1.05] tracking-[-0.02em]">
+          <h2 className="font-serif text-[clamp(2.25rem,4.5vw,3.5rem)] leading-[1.05]">
             Reliability is <em className="text-accent">the feature</em>
           </h2>
         </div>
-        <Reveal className="space-y-5 text-lg lg:col-span-7">
-          {about.map((p, i) => (
-            <p key={i} className={i === 0 ? "" : "text-muted"}>
-              {p}
-            </p>
-          ))}
-        </Reveal>
+        <div className="space-y-10 lg:col-span-7">
+          <Reveal className="space-y-5 text-lg">
+            {about.map((p, i) => (
+              <p key={i} className={i === 0 ? "" : "text-muted"}>
+                {p}
+              </p>
+            ))}
+          </Reveal>
+
+          <Reveal className="rounded-[14px] border border-border bg-surface p-6 sm:p-8">
+            <div className="flex items-center gap-3">
+              <PeregrineMark size={36} id="about" glow />
+              <h3 className="font-mono text-xs uppercase tracking-[0.12em] text-accent">Why Rival Peregrine</h3>
+            </div>
+            <p className="mt-5">{identity.origin}</p>
+            <p className="mt-5 font-mono text-sm uppercase tracking-[0.08em] text-muted">{identity.mantra}</p>
+            <p className="mt-2 font-mono text-sm text-strike">{identity.signature}</p>
+          </Reveal>
+        </div>
       </Container>
     </section>
   );
@@ -265,8 +309,8 @@ export function Contact() {
           <p className="label mb-6">
             <span className="text-accent">06</span> / Contact
           </p>
-          <h2 className="max-w-[14ch] font-serif text-[clamp(2.75rem,7vw,5.5rem)] leading-[1.02] tracking-[-0.03em]">
-            Have a system that needs <em className="text-accent">building?</em>
+          <h2 className="max-w-[16ch] font-serif text-[clamp(2.5rem,6.4vw,5rem)] leading-[1.02]">
+            Ready when you are. Let&apos;s put AI to work, <em className="text-accent">safely.</em>
           </h2>
           <div className="mt-12 grid gap-8 border-t border-border pt-10 md:grid-cols-3">
             <div>

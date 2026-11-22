@@ -1,5 +1,5 @@
 import { Hero } from "@/components/hero";
-import { About, Ai, Contact, Experience, Stack, Work } from "@/components/sections";
+import { About, Contact, Experience, Protocol, Stack, Work } from "@/components/sections";
 import { site, skills } from "@/lib/content";
 
 const personLd = {
@@ -19,7 +19,7 @@ export default function Home() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personLd) }} />
       <Hero />
       <Work />
-      <Ai />
+      <Protocol />
       <Experience />
       <Stack />
       <About />

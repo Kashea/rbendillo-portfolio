@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import type { Project } from "@/lib/content";
+import { stageName, type Project } from "@/lib/content";
 import { Chip, cn } from "@/components/ui";
 import { ProjectVisual } from "@/components/covers";
 
@@ -64,6 +64,21 @@ export function ProjectCard({ project, wide }: { project: Project; wide?: boolea
               </div>
             ))}
           </dl>
+        )}
+        {project.protocol && (
+          <div className="mt-6">
+            <p className="label mb-2">Peregrine Protocol</p>
+            <ul className="flex flex-wrap gap-1.5" aria-label="Protocol stages used">
+              {project.protocol.map((id) => (
+                <li
+                  key={id}
+                  className="rounded-md border border-accent/40 bg-accent/5 px-2 py-0.5 font-mono text-[0.68rem] uppercase tracking-[0.06em] text-accent"
+                >
+                  {stageName(id)}
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
         <div className="mt-7 flex items-end justify-between gap-4">
           <div className="flex flex-wrap gap-1.5">

@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/components/ui";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { PeregrineMark } from "@/components/peregrine-mark";
 
 const links = [
   { href: "/#work", label: "Work" },
@@ -63,11 +64,15 @@ export function Nav() {
       )}
     >
       <nav aria-label="Primary" className="mx-auto flex h-16 max-w-[1200px] items-center justify-between px-[clamp(1.25rem,4vw,3rem)]">
-        <Link href="/" className="group flex items-center gap-2.5" aria-label="Ross Bendillo, home">
-          <span className="grid size-8 place-items-center rounded-lg bg-fg font-mono text-[0.7rem] font-semibold text-bg transition-colors group-hover:bg-accent group-hover:text-accent-ink">
-            RB
+        <Link href="/" className="group relative flex items-center gap-2.5" aria-label="Ross Bendillo, Rival Peregrine, home">
+          <PeregrineMark size={28} id="nav" glow className="transition-transform duration-300 group-hover:-translate-y-0.5" />
+          <span className="hidden text-sm font-semibold sm:block">Ross Bendillo</span>
+          <span
+            className="pointer-events-none absolute left-[38px] top-[calc(100%+2px)] hidden whitespace-nowrap font-mono text-[0.6rem] uppercase tracking-[0.14em] text-accent opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100 sm:block"
+            aria-hidden
+          >
+            Rival Peregrine
           </span>
-          <span className="hidden text-sm font-medium sm:block">Ross Bendillo</span>
         </Link>
 
         <ul className="hidden items-center gap-1 md:flex">
