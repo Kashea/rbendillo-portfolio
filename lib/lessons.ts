@@ -12,6 +12,13 @@ export const reelsTab = "https://www.facebook.com/profile.php?id=61596426017464&
 
 export const lessons: Lesson[] = [
   {
+    day: 2,
+    title: "Agent or chain: when is an agent the wrong call?",
+    date: "2026-11-24",
+    url: "https://www.facebook.com/reel/1136967828918877",
+    resource: "https://github.com/microsoft/ai-agents-for-beginners",
+  },
+  {
     day: 1,
     title: "Where does a RAG pipeline break?",
     date: "2026-11-23",
