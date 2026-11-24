@@ -30,6 +30,7 @@ import {
   site,
   skills,
 } from "@/lib/content";
+import { lessons } from "@/lib/lessons";
 import type { FalconPhase, Stage } from "./falcon-scene";
 
 const FalconScene = dynamic(() => import("./falcon-scene"), { ssr: false });
@@ -560,6 +561,26 @@ function Panel({ open, select }: { open: string; select: (o: Open) => void }) {
     <div>
       <Head kicker={`MODULE ${m.label} / ${String(N).padStart(2, "0")} · ${m.name.toUpperCase()}`} title={m.title} select={select} nav={[prev, next]} />
       <p className="mt-2 text-muted">{m.summary}</p>
+      {m.slug === "teaching" && (
+        <>
+          <p className="jv-mono mt-6 text-[0.7rem] text-muted">LATEST LESSONS</p>
+          <List>
+            {lessons.slice(0, 4).map((l) => (
+              <Row key={l.url}>
+                <a href={l.url} target="_blank" rel="noreferrer" className="group flex items-start justify-between gap-3">
+                  <span>
+                    <span className="jv-mono block text-[0.66rem] text-fire">
+                      {l.day ? `DAY ${l.day}/100` : "REEL"} · {l.date}
+                    </span>
+                    <span className="mt-0.5 block group-hover:text-fire">{l.title}</span>
+                  </span>
+                  <ArrowUpRight size={15} className="mt-1 shrink-0 text-muted group-hover:text-fire" aria-hidden />
+                </a>
+              </Row>
+            ))}
+          </List>
+        </>
+      )}
       <p className="jv-mono mt-6 text-[0.7rem] text-muted">PROOF</p>
       <List>
         {m.proof.map((x) => (

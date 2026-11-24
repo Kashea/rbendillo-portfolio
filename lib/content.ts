@@ -626,7 +626,7 @@ export const modules: Module[] = [
     ],
     stack: ["Explainer videos", "Interview prep", "Free resources"],
     work: [],
-    link: { href: "https://www.facebook.com/profile.php?id=61596426017464", label: "Watch on Facebook" },
+    link: { href: "https://www.facebook.com/profile.php?id=61596426017464&sk=reels_tab", label: "Watch all reels" },
   },
 ];
 

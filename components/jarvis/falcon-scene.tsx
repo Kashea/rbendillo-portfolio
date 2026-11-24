@@ -57,40 +57,40 @@ function featherGeometry(len: number, width: number, base: THREE.Color, tip: THR
 function bodyGeometry() {
   // Teardrop profile turned around the long axis, then laid along +z (head forward).
   const prof = [
-    [0.0, -1.0],
-    [0.07, -0.9],
-    [0.15, -0.62],
-    [0.22, -0.28],
-    [0.245, 0.0],
-    [0.23, 0.26],
-    [0.18, 0.5],
-    [0.12, 0.64],
-    [0.0, 0.7],
+    [0.0, -0.95],
+    [0.04, -0.85],
+    [0.09, -0.55],
+    [0.135, -0.2],
+    [0.15, 0.08],
+    [0.135, 0.32],
+    [0.1, 0.52],
+    [0.075, 0.62],
+    [0.0, 0.66],
   ].map(([r, y]) => new THREE.Vector2(r, y));
   const g = new THREE.LatheGeometry(prof, 28);
   g.rotateX(Math.PI / 2);
-  g.scale(1, 0.82, 1);
+  g.scale(1, 0.75, 1); // flatter top to bottom, like a bird
   return g;
 }
 
 function headGeometry() {
-  const g = new THREE.SphereGeometry(0.16, 24, 18);
-  g.scale(1, 0.92, 1.18);
-  g.translate(0, 0.07, 0.8);
+  const g = new THREE.SphereGeometry(0.095, 24, 18);
+  g.scale(1, 0.85, 1.35);
+  g.translate(0, 0.03, 0.66);
   return g;
 }
 
 function beakGeometry() {
   // Hooked raptor beak: a cone bent downward at the tip.
-  const g = new THREE.ConeGeometry(0.055, 0.2, 12, 6);
+  const g = new THREE.ConeGeometry(0.032, 0.12, 12, 6);
   g.rotateX(Math.PI / 2);
   const pos = g.getAttribute("position") as THREE.BufferAttribute;
   for (let i = 0; i < pos.count; i++) {
-    const z = Math.max(0, pos.getZ(i) + 0.1); // 0 at root, 0.2 at tip (clamped: pow of a tiny negative is NaN)
-    pos.setY(i, pos.getY(i) - Math.pow(z / 0.2, 2.2) * 0.07);
+    const z = Math.max(0, pos.getZ(i) + 0.06); // 0 at root, 0.12 at tip (clamped: pow of a tiny negative is NaN)
+    pos.setY(i, pos.getY(i) - Math.pow(z / 0.12, 2.2) * 0.045);
   }
   g.computeVertexNormals();
-  g.translate(0, 0.04, 1.0);
+  g.translate(0, 0.01, 0.8);
   return g;
 }
 
@@ -100,11 +100,11 @@ function buildBird(look: Look) {
   const base = new THREE.Color(look.base);
   const tip = new THREE.Color(look.tip);
   const geos: Record<string, THREE.BufferGeometry> = {
-    covert: featherGeometry(0.32, 0.2, base, tip),
-    secondary: featherGeometry(0.6, 0.24, base, tip),
-    primaryS: featherGeometry(0.72, 0.2, base, tip),
-    primaryL: featherGeometry(0.98, 0.2, base, tip),
-    tail: featherGeometry(0.62, 0.22, base, tip),
+    covert: featherGeometry(0.28, 0.16, base, tip),
+    secondary: featherGeometry(0.42, 0.17, base, tip),
+    primaryS: featherGeometry(0.78, 0.15, base, tip),
+    primaryL: featherGeometry(1.12, 0.14, base, tip),
+    tail: featherGeometry(0.55, 0.14, base, tip),
   };
   // Shoulder segment: coverts on top, inner secondaries underneath.
   const shoulder: Feather[] = [];
@@ -122,12 +122,12 @@ function buildBird(look: Look) {
   const wrist: Feather[] = [];
   for (let i = 0; i < 10; i++) {
     const k = i / 9;
-    wrist.push({ g: k > 0.45 ? geos.primaryL! : geos.primaryS!, x: 0.02 + k * 0.12, y: -0.006 * i, z: 0, yaw: Math.PI / 2 - 0.35 - k * 1.05, roll: 0 });
+    wrist.push({ g: k > 0.45 ? geos.primaryL! : geos.primaryS!, x: 0.02 + k * 0.1, y: -0.006 * i, z: 0.02, yaw: Math.PI / 2 - 0.55 - k * 0.55, roll: 0 });
   }
   const tail: Feather[] = [];
   for (let i = 0; i < 10; i++) {
     const k = i / 9 - 0.5;
-    tail.push({ g: geos.tail!, x: k * 0.08, y: -0.01 + Math.abs(k) * -0.02, z: -0.85, yaw: Math.PI / 2 + k * 0.55, roll: 0 });
+    tail.push({ g: geos.tail!, x: k * 0.05, y: -0.01 + Math.abs(k) * -0.015, z: -0.78, yaw: Math.PI / 2 + k * 0.28, roll: 0 });
   }
   return { body: bodyGeometry(), head: headGeometry(), beak: beakGeometry(), shoulder, elbow, wrist, tail, geos };
 }
@@ -268,7 +268,7 @@ function Falcon({ look, phase, stage, still }: { look: Look; phase: FalconPhase;
     const cx = (stage.x - size.width / 2) * upp;
     const cy = -(stage.y - size.height / 2) * upp;
     const R = stage.r * upp;
-    const scale = R * 0.3;
+    const scale = R * 0.2;
 
     if (S.phase !== phase) {
       S.phase = phase;
@@ -340,7 +340,9 @@ function Falcon({ look, phase, stage, still }: { look: Look; phase: FalconPhase;
       if (!s || !e || !w) continue;
       s.rotation.set(0, 0.5 * S.tuck, flap + 0.1 * (1 - S.tuck));
       e.rotation.set(0, 0.9 * S.tuck, Math.sin(S.flap - 0.6) * S.amp * 0.55);
-      w.rotation.set(0, 0.75 * S.tuck, Math.sin(S.flap - 1.1) * S.amp * 0.45 - 0.05);
+      // Peregrine glide: wrists swept back into a sickle; they open up on the downbeat.
+      const sweep = 0.32 * (1 - Math.min(1, S.amp * 2));
+      w.rotation.set(0, 0.75 * S.tuck + sweep, Math.sin(S.flap - 1.1) * S.amp * 0.45 - 0.05);
     }
 
     // Embers from the wings and tail in Rival Mode.
@@ -392,12 +394,12 @@ function Falcon({ look, phase, stage, still }: { look: Look; phase: FalconPhase;
     ));
 
   const wing = (side: 1 | -1, s: React.RefObject<THREE.Group | null>, e: React.RefObject<THREE.Group | null>, w: React.RefObject<THREE.Group | null>) => (
-    <group position={[0.17 * side, 0.05, 0.12]} scale={[side, 1, 1]}>
+    <group position={[0.1 * side, 0.04, 0.16]} scale={[side, 1, 1]}>
       <group ref={s}>
         {feathers(bird.shoulder)}
-        <group ref={e} position={[0.68, 0, 0]}>
+        <group ref={e} position={[0.55, 0, -0.02]}>
           {feathers(bird.elbow)}
-          <group ref={w} position={[0.66, 0, -0.02]}>
+          <group ref={w} position={[0.6, 0, -0.06]}>
             {feathers(bird.wrist)}
           </group>
         </group>
@@ -415,11 +417,11 @@ function Falcon({ look, phase, stage, still }: { look: Look; phase: FalconPhase;
         <mesh geometry={bird.body} material={mats.body} />
         <mesh geometry={bird.head} material={mats.body} />
         <mesh geometry={bird.beak} material={mats.beak} />
-        <mesh position={[0.095, 0.11, 0.88]} material={mats.eye}>
-          <sphereGeometry args={[0.022, 12, 10]} />
+        <mesh position={[0.07, 0.05, 0.72]} material={mats.eye}>
+          <sphereGeometry args={[0.014, 10, 8]} />
         </mesh>
-        <mesh position={[-0.095, 0.11, 0.88]} material={mats.eye}>
-          <sphereGeometry args={[0.022, 12, 10]} />
+        <mesh position={[-0.07, 0.05, 0.72]} material={mats.eye}>
+          <sphereGeometry args={[0.014, 10, 8]} />
         </mesh>
         {wing(1, rs, re, rw)}
         {wing(-1, ls, le, lw)}
