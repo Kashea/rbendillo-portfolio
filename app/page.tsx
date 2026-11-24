@@ -1,5 +1,5 @@
-import { Hero } from "@/components/hero";
-import { About, Console, Contact, Experience, Protocol, Stack, Work } from "@/components/sections";
+import { CommandDeck } from "@/components/jarvis/command-deck";
+import { About, Contact, Experience, Protocol, Stack, Work } from "@/components/sections";
 import { site, skills } from "@/lib/content";
 
 const personLd = {
@@ -17,8 +17,7 @@ export default function Home() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personLd) }} />
-      <Hero />
-      <Console />
+      <CommandDeck />
       <Work />
       <Protocol />
       <Experience />

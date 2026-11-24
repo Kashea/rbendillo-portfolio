@@ -19,30 +19,9 @@ import { Reveal } from "@/components/motion";
 import { ProjectCard } from "@/components/project-card";
 import { CopyEmail } from "@/components/copy-email";
 import { PeregrineMark } from "@/components/peregrine-mark";
-import { PeregrineConsole } from "@/components/peregrine-console";
 
 const pad = "py-[clamp(5rem,12vw,9rem)]";
 
-export function Console() {
-  return (
-    <section id="console" className={`${pad} scroll-mt-16`}>
-      <Container>
-        <SectionHeader
-          index="00"
-          title={
-            <>
-              The Peregrine <em className="text-fire">Console</em>
-            </>
-          }
-          lede="Pick a module to see what I build and the proof behind it. The core opens the method."
-        />
-        <Reveal>
-          <PeregrineConsole />
-        </Reveal>
-      </Container>
-    </section>
-  );
-}
 
 export function Work() {
   const [lead, ...rest] = featured;

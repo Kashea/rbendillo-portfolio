@@ -210,53 +210,187 @@ body {
   }
 }
 
-/* ---------- The Peregrine Console ---------- */
-.console-deck {
+/* ---------- Command deck (JARVIS HUD) ---------- */
+:root {
+  --jv-plate: #e7eaf0;
+  --jv-plate-hi: #ffffff;
+  --jv-plate-lo: #cfd4de;
+  --jv-edge: #b7bdca;
+  --jv-core-bg: #f4f6f9;
+  --jv-glass: rgba(255, 255, 255, 0.78);
+  --jv-line: rgba(0, 122, 140, 0.28);
+}
+.dark {
+  --jv-plate: #161b25;
+  --jv-plate-hi: #273142;
+  --jv-plate-lo: #0b0e14;
+  --jv-edge: rgba(0, 229, 255, 0.35);
+  --jv-core-bg: #070a10;
+  --jv-glass: rgba(9, 13, 20, 0.82);
+  --jv-line: rgba(0, 229, 255, 0.25);
+}
+.jv-bg {
   background:
-    radial-gradient(60% 70% at 30% 50%, color-mix(in srgb, var(--fire) 10%, transparent), transparent 70%),
-    radial-gradient(50% 60% at 80% 40%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 70%),
-    linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 32px 32px,
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 32px 32px,
-    var(--surface);
+    radial-gradient(45% 55% at 62% 48%, color-mix(in srgb, var(--fire) 14%, transparent), transparent 70%),
+    radial-gradient(60% 70% at 70% 50%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 75%),
+    linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 40px 40px,
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 40px 40px,
+    var(--bg);
 }
-.dark .console-deck {
-  box-shadow: inset 0 0 0 1px rgba(255, 176, 32, 0.08), 0 0 80px -30px rgba(255, 140, 0, 0.35);
-}
-.pc-label {
+.jv-mono {
   font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: 15px;
-  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.jv-panel {
+  border: 1px solid var(--jv-line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  backdrop-filter: blur(6px);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.dark .jv-panel {
+  box-shadow: inset 0 1px 0 rgba(0, 229, 255, 0.12), 0 0 60px -30px rgba(0, 229, 255, 0.35);
+}
+/* HUD bracket corners */
+.jv-corners::before,
+.jv-corners::after {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  z-index: 25;
+}
+.jv-corners::before { top: 6px; left: 6px; border-top: 2px solid var(--accent); border-left: 2px solid var(--accent); }
+.jv-corners::after { bottom: 6px; right: 6px; border-bottom: 2px solid var(--fire); border-right: 2px solid var(--fire); }
+.jv-glass {
+  border: 1px solid var(--jv-line);
+  border-radius: 14px;
+  background: var(--jv-glass);
+  backdrop-filter: blur(14px) saturate(1.2);
+  box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.45), inset 0 1px 0 color-mix(in srgb, var(--accent) 18%, transparent);
+}
+.jv-glass::before {
+  /* thin holographic top edge */
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  border-radius: 14px 14px 0 0;
+  background: linear-gradient(90deg, transparent, var(--accent), var(--fire), transparent);
+  opacity: 0.8;
+}
+.jv-stat {
+  border: 1px solid var(--jv-line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: color-mix(in srgb, var(--raised) 60%, transparent);
+}
+.jv-row {
+  border: 1px solid var(--jv-line);
+  border-left: 2px solid var(--fire);
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: color-mix(in srgb, var(--raised) 55%, transparent);
+}
+.jv-chip {
+  border: 1px solid var(--jv-line);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.jv-tile {
+  border: 1px solid var(--jv-line);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.8rem;
+  text-align: center;
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+}
+.jv-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--jv-line);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 0.82rem;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+.jv-btn:hover { border-color: var(--fire); color: var(--text); }
+.jv-btn-primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+.jv-btn-primary:hover { filter: brightness(1.1); color: var(--accent-ink); }
+.jv-icon {
+  border: 1px solid var(--jv-line);
+  border-radius: 999px;
+  padding: 6px;
+}
+.jv-icon:hover { border-color: var(--fire); }
+.jv-dock {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.72rem;
   letter-spacing: 0.12em;
-  pointer-events: none;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid transparent;
+  transition: all 0.2s;
 }
-.pc-num {
+.jv-dock:hover { color: var(--text); border-color: var(--jv-line); background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.jv-dock-on { color: var(--fire); border-color: var(--fire); background: color-mix(in srgb, var(--fire) 10%, transparent); }
+.jv-label {
   font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  pointer-events: none;
+}
+.jv-num {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   pointer-events: none;
 }
-.pc-core {
+.jv-tele {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+}
+.jv-core {
   font-family: var(--font-geist-sans), system-ui, sans-serif;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 800;
-  fill: var(--text);
   pointer-events: none;
 }
-.pc-seg { cursor: pointer; }
-.pc-seg:focus-visible path:first-child,
-.pc-seg:focus-visible circle:nth-child(2) {
-  stroke: var(--fire);
-  stroke-width: 3;
+.jv-seg { cursor: pointer; transition: transform 0.25s ease-out; }
+.jv-seg:focus-visible path:first-child { stroke: var(--fire); stroke-width: 3; }
+.jv-sweep {
+  border-radius: 9999px;
+  background: conic-gradient(from 0deg, transparent 0deg, color-mix(in srgb, var(--accent) 22%, transparent) 28deg, transparent 32deg);
+  mask: radial-gradient(circle, transparent 38%, #000 39%, #000 70%, transparent 71%);
+  animation: jv-spin 6s linear infinite;
 }
-.pc-spin-slow { animation: pc-spin 80s linear infinite; transform-origin: 0 0; }
-.pc-spin-rev { animation: pc-spin 55s linear infinite reverse; transform-origin: 0 0; }
-@keyframes pc-spin { to { transform: rotate(360deg); } }
-@media (max-width: 640px) {
-  .pc-label { font-size: 17px; letter-spacing: 0.06em; }
-  .pc-num { font-size: 14px; }
-  .pc-core { font-size: 27px; }
-}
+.jv-spin-40 { animation: jv-spin 40s linear infinite; }
+.jv-spin-80 { animation: jv-spin 80s linear infinite; }
+.jv-spin-rev-60 { animation: jv-spin 60s linear infinite reverse; }
+.jv-spin-rev-120 { animation: jv-spin 120s linear infinite reverse; }
+.jv-breathe { animation: jv-breathe 3.2s ease-in-out infinite; transform-origin: 0 0; }
+.jv-flare { animation: jv-flare 1.1s ease-out 1; transform-origin: 0 0; }
+@keyframes jv-spin { to { transform: rotate(360deg); } }
+@keyframes jv-breathe { 0%, 100% { opacity: 0.75; transform: scale(0.96); } 50% { opacity: 1; transform: scale(1.03); } }
+@keyframes jv-flare { 0% { opacity: 1; transform: scale(0.6); } 25% { opacity: 1; transform: scale(1.5); } 100% { opacity: 0.8; transform: scale(1); } }
 @media (prefers-reduced-motion: reduce) {
-  .pc-spin-slow, .pc-spin-rev { animation: none; }
+  .jv-sweep, .jv-spin-40, .jv-spin-80, .jv-spin-rev-60, .jv-spin-rev-120, .jv-breathe, .jv-flare { animation: none; }
+}
+@media (max-width: 640px) {
+  .jv-label { font-size: 16px; letter-spacing: 0.06em; }
+  .jv-num { font-size: 13px; }
+  .jv-tele { display: none; }
 }

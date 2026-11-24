@@ -9,7 +9,6 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { PeregrineMark } from "@/components/peregrine-mark";
 
 const links = [
-  { href: "/#console", label: "Console" },
   { href: "/#work", label: "Work" },
   { href: "/#ai", label: "AI" },
   { href: "/#experience", label: "Experience" },

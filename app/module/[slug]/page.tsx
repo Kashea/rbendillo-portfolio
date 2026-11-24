@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
 import { modules } from "@/lib/content";
-import { Container } from "@/components/ui";
-import { PeregrineConsole } from "@/components/peregrine-console";
+import { CommandDeck } from "@/components/jarvis/command-deck";
 
 const slugs = [...modules.map((m) => m.slug), "protocol"];
 
@@ -35,17 +32,5 @@ export default function ModulePage({ params }: PageProps<"/module/[slug]">) {
 async function ModuleView({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!slugs.includes(slug)) notFound();
-  return (
-    <section className="pb-24 pt-28">
-      <Container>
-        <Link href="/#console" className="label inline-flex items-center gap-2 hover:text-fg">
-          <ArrowLeft size={14} aria-hidden /> Home
-        </Link>
-        <h1 className="mt-6 mb-8 font-serif text-[clamp(2.25rem,5vw,3.5rem)] leading-[1.05] tracking-[-0.03em]">
-          The Peregrine <em className="text-fire">Console</em>
-        </h1>
-        <PeregrineConsole initial={slug} />
-      </Container>
-    </section>
-  );
+  return <CommandDeck initial={slug} />;
 }
