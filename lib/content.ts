@@ -494,6 +494,142 @@ export const capabilities: { area: string; proof: string[] }[] = [
   },
 ];
 
+// The Peregrine Console: the dial on the home page. Each segment is a module with its own URL
+// (/module/<slug>). Facts here repeat what the case studies already prove; nothing new is claimed.
+export type Module = {
+  slug: string;
+  label: string;
+  name: string; // short dial label
+  title: string;
+  summary: string;
+  proof: string[];
+  stack: string[];
+  work: string[]; // project slugs
+  link?: { href: string; label: string };
+};
+
+export const modules: Module[] = [
+  {
+    slug: "ai-automation",
+    label: "01",
+    name: "AI Automation",
+    title: "AI automation with a human on the trigger",
+    summary:
+      "Workflows where AI prepares the work and a person approves it. Every result carries a confidence and a risk score, and anything uncertain stops for a human.",
+    proof: [
+      "Approval workflows in n8n with Claude and Power Automate",
+      "Edit, approve or block from Microsoft Teams, with every decision logged",
+      "Audit states on every item, from draft to sent",
+    ],
+    stack: ["n8n", "Claude", "Power Automate", "Microsoft Teams"],
+    work: ["ai-approval-workflows"],
+  },
+  {
+    slug: "agents",
+    label: "02",
+    name: "Agents & Flows",
+    title: "Agents and orchestration",
+    summary:
+      "Multi-step automations with success and error paths designed up front, and a human handoff built in rather than bolted on.",
+    proof: [
+      "27 n8n integration workflows on one live client platform",
+      "Teams-based AI chat intelligence",
+      "Each workflow has a success path, an error path and a person to escalate to",
+    ],
+    stack: ["n8n", "Claude", "REST APIs", "Webhooks"],
+    work: ["rigsafe-crm", "ai-approval-workflows"],
+  },
+  {
+    slug: "llm-grounding",
+    label: "03",
+    name: "LLM Grounding",
+    title: "LLMs, grounded",
+    summary:
+      "The model writes; code does the maths. Figures come from the system of record, and answers are designed to cite where they came from.",
+    proof: [
+      "Claude in Teams chat-intelligence workflows",
+      "Figures computed in code, never by the model",
+      "Typed tools and cited hybrid retrieval designed for Rigsafe",
+    ],
+    stack: ["Claude", "Prompt engineering", "RAG & eval design"],
+    work: ["ai-approval-workflows", "rigsafe-crm"],
+  },
+  {
+    slug: "evaluation",
+    label: "04",
+    name: "Tests & Evals",
+    title: "Ops and evaluation",
+    summary: "Ship fast because it is safe: nothing deploys unless every test suite passes, and every release can be rolled back.",
+    proof: [
+      "40 automated test suites gate every deploy",
+      "Independent read-back from outside the workflow engine",
+      "15 runbooks, including release, rollback and schema migration",
+    ],
+    stack: ["Automated test gates", "Runbooks", "Git & GitHub"],
+    work: ["rigsafe-crm"],
+  },
+  {
+    slug: "safety",
+    label: "05",
+    name: "Safety",
+    title: "Safety and governance",
+    summary: "Unconfirmed data never gets guessed, every write is checked on the server, and the record of who changed what cannot be quietly edited.",
+    proof: [
+      "Risk gates with approve or block, and audit states",
+      "Unconfirmed rows held in a review queue for a person",
+      "4 permission roles, server-enforced, with a tamper-evident change log",
+      "Strict CSP and passwordless sign-in",
+    ],
+    stack: ["Role-based access", "CSP & security headers", "Passwordless auth"],
+    work: ["rigsafe-crm"],
+  },
+  {
+    slug: "web-apps",
+    label: "06",
+    name: "Next.js Apps",
+    title: "Full-stack Next.js products",
+    summary: "Production apps in Next.js, React and TypeScript, from the data model to the last pixel, built and reviewed with Claude Code.",
+    proof: [
+      "Rigsafe CRM: 7 business areas in one platform",
+      "The Karate Institute: booking site with per-page SEO",
+      "Chito-Ryu International: English and Japanese routes and a dojo directory",
+      "This portfolio: Lighthouse mobile 92 performance, 100 accessibility, best practices and SEO",
+    ],
+    stack: ["Next.js App Router", "React", "TypeScript", "Tailwind CSS", "three.js"],
+    work: ["rigsafe-crm", "karate-institute", "chito-ryu-international"],
+  },
+  {
+    slug: "data",
+    label: "07",
+    name: "Data & APIs",
+    title: "Data and integrations",
+    summary: "Messy spreadsheets, mailboxes and forms turned into one trusted record, with anything uncertain sent to a person.",
+    proof: [
+      "Client spreadsheets migrated into the CRM with a review queue",
+      "Mail, files, forms and field data pulled in through APIs, then normalised and verified",
+      "Microsoft 365 and Entra ID identities and permissions",
+    ],
+    stack: ["Postgres", "REST", "GraphQL", "Microsoft 365", "Entra ID"],
+    work: ["rigsafe-crm"],
+  },
+  {
+    slug: "teaching",
+    label: "08",
+    name: "Teaching",
+    title: "Teaching AI engineering in public",
+    summary:
+      "A free daily lesson for aspiring AI engineers: one real interview question, explained in plain English, with a free resource to practise on.",
+    proof: [
+      "Daily AI engineering lesson reels on the Rival Peregrine Page",
+      "A 100-day series built around real interview questions",
+      "Every lesson links a free GitHub resource",
+    ],
+    stack: ["Explainer videos", "Interview prep", "Free resources"],
+    work: [],
+    link: { href: "https://www.facebook.com/profile.php?id=61596426017464", label: "Watch on Facebook" },
+  },
+];
+
 // Consolidated from the CVs plus shipped client work. No percentages, no unsubstantiated tools.
 export const skills: { group: string; items: string[] }[] = [
   { group: "Languages", items: ["TypeScript", "JavaScript", "SQL", "HTML & CSS", "Python (growing)"] },

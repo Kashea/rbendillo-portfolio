@@ -67,9 +67,13 @@ const palette = {
     field: 0.7,
     body: "#1A1D26",
     plate: "#2B3040",
-    edge: "#00E5FF",
-    eye: "#FF2BD6",
+    // Rival Mode: the peregrine rises as a phoenix in golden fire over the neon field.
+    edge: "#FFC23A",
+    eye: "#FFF4C2",
     additive: true,
+    fire: true,
+    trailA: "#FFF1A8",
+    trailB: "#FF3D00",
   },
   light: {
     a: "#0091A8",
@@ -80,9 +84,12 @@ const palette = {
     edge: "#0091A8",
     eye: "#C2189B",
     additive: false,
+    fire: false,
+    trailA: "#0091A8",
+    trailB: "#C2189B",
   },
 };
-type Palette = (typeof palette)["dark"];
+type Palette = (typeof palette)["dark"] | (typeof palette)["light"];
 
 function Field({ p, still }: { p: Palette; still: boolean }) {
   const mat = useRef<THREE.ShaderMaterial>(null);
@@ -218,6 +225,53 @@ function Plate({
   );
 }
 
+
+// ---------------------------------------------------------------------------
+// Phoenix fire: embers shed from the wingtips and tail, cooling from white-gold to ember red.
+// ---------------------------------------------------------------------------
+const EMBERS = 900;
+const emberVertex = /* glsl */ `
+  attribute float aLife;
+  attribute float aSize;
+  varying float vLife;
+  void main() {
+    vLife = aLife;
+    vec4 mv = modelViewMatrix * vec4(position, 1.0);
+    gl_Position = projectionMatrix * mv;
+    gl_PointSize = aSize * (0.35 + aLife * 0.9) * (6.0 / -mv.z);
+  }
+`;
+const emberFragment = /* glsl */ `
+  varying float vLife;
+  void main() {
+    float d = length(gl_PointCoord - 0.5);
+    float soft = 1.0 - smoothstep(0.0, 0.5, d);
+    if (soft * vLife < 0.01) discard;
+    vec3 white = vec3(1.0, 0.97, 0.82);
+    vec3 gold = vec3(1.0, 0.74, 0.16);
+    vec3 orange = vec3(1.0, 0.36, 0.04);
+    vec3 red = vec3(0.55, 0.06, 0.02);
+    vec3 col = vLife > 0.66 ? mix(gold, white, (vLife - 0.66) / 0.34)
+             : vLife > 0.33 ? mix(orange, gold, (vLife - 0.33) / 0.33)
+             : mix(red, orange, vLife / 0.33);
+    gl_FragColor = vec4(col, soft * pow(vLife, 0.7));
+  }
+`;
+
+function haloTexture() {
+  const c = document.createElement("canvas");
+  c.width = c.height = 128;
+  const x = c.getContext("2d")!;
+  const g = x.createRadialGradient(64, 64, 0, 64, 64, 64);
+  g.addColorStop(0, "rgba(255,236,170,0.9)");
+  g.addColorStop(0.25, "rgba(255,176,40,0.55)");
+  g.addColorStop(0.6, "rgba(255,80,0,0.18)");
+  g.addColorStop(1, "rgba(255,40,0,0)");
+  x.fillStyle = g;
+  x.fillRect(0, 0, 128, 128);
+  return new THREE.CanvasTexture(c);
+}
+
 // Flight loop, 18 seconds: flap, soar, stoop dive, pull up, soar.
 const CYCLE = 18;
 function phaseAt(t: number) {
@@ -250,13 +304,22 @@ function Peregrine({ p, still }: { p: Palette; still: boolean }) {
   const g = useMemo(() => buildGeometry(), []);
   const m = useMemo<Mats>(
     () => ({
-      body: new THREE.MeshStandardMaterial({ color: p.body, metalness: 0.85, roughness: 0.32, flatShading: true }),
+      body: new THREE.MeshStandardMaterial({
+        color: p.fire ? "#2A1A0C" : p.body,
+        metalness: 0.85,
+        roughness: 0.32,
+        flatShading: true,
+        emissive: p.fire ? "#FF8A1A" : "#000000",
+        emissiveIntensity: p.fire ? 0.3 : 0,
+      }),
       plate: new THREE.MeshStandardMaterial({
-        color: p.plate,
+        color: p.fire ? "#3A2410" : p.plate,
         metalness: 0.8,
         roughness: 0.36,
         flatShading: true,
         side: THREE.DoubleSide,
+        emissive: p.fire ? "#FF6A00" : "#000000",
+        emissiveIntensity: p.fire ? 0.38 : 0,
       }),
       edge: new THREE.LineBasicMaterial({
         color: p.edge,
@@ -274,8 +337,8 @@ function Peregrine({ p, still }: { p: Palette; still: boolean }) {
     const geo = new THREE.BufferGeometry();
     geo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(TRAIL * 3), 3));
     const colors = new Float32Array(TRAIL * 3);
-    const a = new THREE.Color(p.a);
-    const b = new THREE.Color(p.b);
+    const a = new THREE.Color(p.trailA);
+    const b = new THREE.Color(p.trailB);
     const c = new THREE.Color();
     for (let i = 0; i < TRAIL; i++) {
       c.copy(a).lerp(b, i / (TRAIL - 1));
@@ -294,6 +357,44 @@ function Peregrine({ p, still }: { p: Palette; still: boolean }) {
       }),
     [p],
   );
+
+  const embers = useMemo(() => {
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(EMBERS * 3), 3));
+    geo.setAttribute("aLife", new THREE.BufferAttribute(new Float32Array(EMBERS), 1));
+    const sizes = new Float32Array(EMBERS);
+    for (let i = 0; i < EMBERS; i++) sizes[i] = 3 + Math.random() * 8;
+    geo.setAttribute("aSize", new THREE.BufferAttribute(sizes, 1));
+    return geo;
+  }, []);
+  const emberMat = useMemo(
+    () =>
+      new THREE.ShaderMaterial({
+        vertexShader: emberVertex,
+        fragmentShader: emberFragment,
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+      }),
+    [],
+  );
+  const halo = useMemo(
+    () =>
+      p.fire
+        ? new THREE.SpriteMaterial({ map: haloTexture(), blending: THREE.AdditiveBlending, depthWrite: false, transparent: true })
+        : null,
+    [p],
+  );
+  const emberPoints = useRef<THREE.Points>(null);
+  const haloSprite = useRef<THREE.Sprite>(null);
+  // Mutable particle state lives in a ref, outside React's render data.
+  const sim = useRef({
+    vel: new Float32Array(EMBERS * 3),
+    age: new Float32Array(EMBERS),
+    max: new Float32Array(EMBERS).fill(1),
+    next: 0,
+    p: new THREE.Vector3(),
+  });
 
   const bird = useRef<THREE.Group>(null);
   const trailLine = useRef<THREE.Line>(null);
@@ -357,7 +458,8 @@ function Peregrine({ p, still }: { p: Palette; still: boolean }) {
     // Contrail from the tail, newest point first.
     const line = trailLine.current;
     if (line) {
-      line.visible = !still;
+      // In phoenix mode the embers are the wake, so the thin contrail stays hidden.
+      line.visible = !still && !p.fire;
       const pos = line.geometry.getAttribute("position") as THREE.BufferAttribute;
       const arr = pos.array as Float32Array;
       const tailX = a.x - (ahead.x - a.x) * 4;
@@ -371,6 +473,67 @@ function Peregrine({ p, still }: { p: Palette; still: boolean }) {
       arr.set([tailX, tailY, tailZ], 0);
       pos.needsUpdate = true;
       line.geometry.computeBoundingSphere();
+    }
+
+    // Phoenix embers: spawn on wingtips and tail, rise, drift back and cool.
+    const pts = emberPoints.current;
+    if (pts) {
+      pts.visible = p.fire && !still;
+      if (pts.visible) {
+        const S = sim.current;
+        const pos = pts.geometry.getAttribute("position") as THREE.BufferAttribute;
+        const life = pts.geometry.getAttribute("aLife") as THREE.BufferAttribute;
+        const parr = pos.array as Float32Array;
+        const larr = life.array as Float32Array;
+        // Emit along the trailing edge of every wing segment and from the tail fan,
+        // so the flame reads as one continuous wake rather than puffs.
+        const segs = [rs.current, re.current, rw.current, ls.current, le.current, lw.current];
+        const spawn = Math.round(16 + mo.amp * 14);
+        for (let n = 0; n < spawn; n++) {
+          const onTail = Math.random() < 0.28;
+          const src = onTail ? b : segs[Math.floor(Math.random() * segs.length)]!;
+          if (!src) continue;
+          const i = S.next;
+          S.next = (S.next + 1) % EMBERS;
+          if (onTail) S.p.set((Math.random() - 0.5) * 0.25, 0.02, -1.05 - Math.random() * 0.35);
+          else S.p.set(Math.random() * 0.72, (Math.random() - 0.5) * 0.04, -0.12 - Math.random() * 0.12);
+          src.localToWorld(S.p);
+          parr.set([S.p.x, S.p.y, S.p.z], i * 3);
+          S.vel.set(
+            [
+              (Math.random() - 0.5) * 0.18 - (ahead.x - a.x) * 9,
+              0.12 + Math.random() * 0.28,
+              (Math.random() - 0.5) * 0.18 - (ahead.z - a.z) * 9,
+            ],
+            i * 3,
+          );
+          S.age[i] = 0;
+          S.max[i] = 0.35 + Math.random() * 0.75;
+        }
+        for (let i = 0; i < EMBERS; i++) {
+          if (S.age[i]! >= S.max[i]!) {
+            larr[i] = 0;
+            continue;
+          }
+          S.age[i]! += dt;
+          const k = i * 3;
+          S.vel[k + 1]! += dt * 0.25;
+          parr[k]! += S.vel[k]! * dt;
+          parr[k + 1]! += S.vel[k + 1]! * dt;
+          parr[k + 2]! += S.vel[k + 2]! * dt;
+          larr[i] = Math.max(0, 1 - S.age[i]! / S.max[i]!);
+        }
+        pos.needsUpdate = true;
+        life.needsUpdate = true;
+        pts.geometry.computeBoundingSphere();
+      }
+    }
+    const hs = haloSprite.current;
+    if (hs) {
+      hs.position.copy(a);
+      const flick = 0.82 + Math.sin(t * 9) * 0.06 + Math.sin(t * 23) * 0.04;
+      hs.scale.setScalar(scale * 3.4 * flick);
+      (hs.material as THREE.SpriteMaterial).opacity = still ? 0.6 : flick;
     }
 
     // Gentle parallax from the pointer.
@@ -411,6 +574,11 @@ function Peregrine({ p, still }: { p: Palette; still: boolean }) {
         <primitive object={trail} attach="geometry" />
         <primitive object={trailMat} attach="material" />
       </line>
+      {halo && <sprite ref={haloSprite} material={halo} />}
+      <points ref={emberPoints} frustumCulled={false}>
+        <primitive object={embers} attach="geometry" />
+        <primitive object={emberMat} attach="material" />
+      </points>
       <group ref={bird} scale={scale}>
         <Plate g={g} k="body" m={m} material={m.body} />
         <Plate g={g} k="keel" m={m} material={m.body} />
@@ -445,7 +613,7 @@ function Lights({ p }: { p: Palette }) {
     <>
       <ambientLight intensity={p.additive ? 0.35 : 0.9} />
       <directionalLight position={[3, 5, 4]} intensity={p.additive ? 1.4 : 2.2} />
-      <pointLight position={[3, 2.5, 2]} color={p.a} intensity={p.additive ? 14 : 6} distance={9} />
+      <pointLight position={[3, 2.5, 2]} color={p.fire ? "#FFB020" : p.a} intensity={p.additive ? 16 : 6} distance={9} />
       <pointLight position={[0, 1, -2]} color={p.b} intensity={p.additive ? 10 : 4} distance={8} />
     </>
   );
